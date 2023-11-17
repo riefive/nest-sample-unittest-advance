@@ -1,21 +1,13 @@
-import {
-  BadRequestException,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-} from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { PokemonService } from './pokemon.service';
+import { ParsePokemonIdPipe } from '../parse-pokemon-id/parse-pokemon-id.pipe';
 
 @Controller('pokemon')
 export class PokemonController {
   constructor(private readonly pokemonService: PokemonService) {}
 
   @Get(':id')
-  getPokemon(@Param('id', ParseIntPipe) id: number) {
-    if (id < 0 || id > 151) {
-      throw new BadRequestException(`Invalid Pokemon ID`);
-    }
+  getPokemon(@Param('id', ParsePokemonIdPipe) id: number) {
     return this.pokemonService.getPokemon(id);
   }
 }
